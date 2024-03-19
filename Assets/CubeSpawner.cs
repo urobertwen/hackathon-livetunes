@@ -17,6 +17,7 @@ public class CubeSpawner : MonoBehaviour
     private float[] cubeTargets; // Array to store the target heights for each cube
     private float[] cubeSpeeds; // Array to store the bounce speeds for each cube
     private int fps;
+    bool hasRun = false; 
 
     public struct userAttributes {}
     public struct appAttributes 
@@ -38,10 +39,6 @@ public class CubeSpawner : MonoBehaviour
     {
         await InitializeRemoteConfigAsync();
         RemoteConfigService.Instance.FetchCompleted += ApplyRemoteSettings;
-        var attributes = new appAttributes();
-        attributes.currentFPS = fps;
-        RemoteConfigService.Instance.FetchConfigs(new userAttributes(), attributes);
-
         cubeTargets = new float[numberOfCubes];
         cubeSpeeds = new float[numberOfCubes];
         SetCubeTargets();
@@ -51,13 +48,25 @@ public class CubeSpawner : MonoBehaviour
 
     void ApplyRemoteSettings(ConfigResponse configResponse)
     {
+        numberOfCubes = RemoteConfigService.Instance.appConfig.GetInt("numberOfCubes",numberOfCubes);
         Debug.Log("RemoteConfigService.Instance.appConfig fetched: " + RemoteConfigService.Instance.appConfig.config.ToString());
     }
 
-    void Update()
+    async Task Update()
     {
         BounceCubes();
         CalculateFPS();
+        await Task.Delay(1000);
+        
+        if (!hasRun) 
+        { 
+            
+            var attributes = new appAttributes();
+            attributes.currentFPS = fps;
+            RemoteConfigService.Instance.FetchConfigs(new userAttributes(), attributes);
+            hasRun = true;
+        } 
+
     }
 
     void SetCubeTargets()
@@ -78,7 +87,7 @@ public class CubeSpawner : MonoBehaviour
 
     void SpawnCubes()
     {
-        numberOfCubes = RemoteConfigService.Instance.appConfig.GetInt("numberOfCubes",numberOfCubes);
+        
         for (int i = 0; i < numberOfCubes; i++)
         {
             Vector3 spawnPosition = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), Random.Range(-5f, 5f));
