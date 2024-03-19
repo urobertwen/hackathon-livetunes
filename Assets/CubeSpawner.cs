@@ -50,6 +50,16 @@ public class CubeSpawner : MonoBehaviour
     {
         numberOfCubes = RemoteConfigService.Instance.appConfig.GetInt("numberOfCubes",numberOfCubes);
         Debug.Log("RemoteConfigService.Instance.appConfig fetched: " + RemoteConfigService.Instance.appConfig.config.ToString());
+
+        //clear the cubes from the scene
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        SetCubeTargets();
+        SetCubeSpeeds();
+        SpawnCubes();
     }
 
     async Task Update()
@@ -57,15 +67,14 @@ public class CubeSpawner : MonoBehaviour
         BounceCubes();
         CalculateFPS();
         await Task.Delay(1000);
-        
-        if (!hasRun) 
-        { 
-            
+
+        if (!hasRun)
+        {
             var attributes = new appAttributes();
             attributes.currentFPS = fps;
             RemoteConfigService.Instance.FetchConfigs(new userAttributes(), attributes);
             hasRun = true;
-        } 
+        }
 
     }
 
