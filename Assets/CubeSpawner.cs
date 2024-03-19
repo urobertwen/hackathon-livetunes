@@ -7,7 +7,7 @@ using Unity.Services.Authentication;
 public class CubeSpawner : MonoBehaviour
 {
     public GameObject cubePrefab; // Reference to the cube prefab
-    public int numberOfCubes = 10000; // Number of cubes to spawn
+    public int numberOfCubes = 500; // Number of cubes to spawn
     public float minBounceHeight = 0f; // Minimum bounce height of the cubes
     public float maxBounceHeight = 5f; // Maximum bounce height of the cubes
     public float minBounceSpeed = 0f; // Minimum bounce speed of the cubes
@@ -39,11 +39,7 @@ public class CubeSpawner : MonoBehaviour
     {
         await InitializeRemoteConfigAsync();
         RemoteConfigService.Instance.FetchCompleted += ApplyRemoteSettings;
-        cubeTargets = new float[numberOfCubes];
-        cubeSpeeds = new float[numberOfCubes];
-        SetCubeTargets();
-        SetCubeSpeeds();
-        SpawnCubes();
+        initScene();
     }
 
     void ApplyRemoteSettings(ConfigResponse configResponse)
@@ -57,9 +53,7 @@ public class CubeSpawner : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        SetCubeTargets();
-        SetCubeSpeeds();
-        SpawnCubes();
+        initScene();
     }
 
     async Task Update()
@@ -92,6 +86,15 @@ public class CubeSpawner : MonoBehaviour
         {
             cubeSpeeds[i] = Random.Range(minBounceSpeed, maxBounceSpeed);
         }
+    }
+
+    void initScene()
+    {
+        cubeTargets = new float[numberOfCubes];
+        cubeSpeeds = new float[numberOfCubes];
+        SetCubeTargets();
+        SetCubeSpeeds();
+        SpawnCubes();
     }
 
     void SpawnCubes()
