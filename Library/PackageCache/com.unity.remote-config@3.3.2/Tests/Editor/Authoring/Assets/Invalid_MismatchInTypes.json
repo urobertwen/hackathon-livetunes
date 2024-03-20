@@ -1,0 +1,8 @@
+{
+  "entries": {
+    "mock_key": "mock_value"
+  },
+  "types": {
+    "mock_key_bad": "STRING"
+  }
+}

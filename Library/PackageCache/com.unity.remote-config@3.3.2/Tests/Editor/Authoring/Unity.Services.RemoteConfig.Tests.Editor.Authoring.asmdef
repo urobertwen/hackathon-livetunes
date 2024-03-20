@@ -1,0 +1,49 @@
+{
+    "name": "Unity.Services.RemoteConfig.Tests.Editor.Authoring",
+    "rootNamespace": "Unity.Services.RemoteConfig.Tests.Editor.Authoring",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.Services.Core.Editor",
+        "Unity.Services.DeploymentApi",
+        "Unity.Services.Core.TestUtils.Editor",
+        "Unity.Services.RemoteConfig.Authoring.Editor",
+        "Unity.Services.RemoteConfig.Editor.Authoring.Core"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "Moq.dll",
+        "Newtonsoft.Json.dll",
+        "Mono.Cecil.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS",
+        "UNITY_2021_3_OR_NEWER",
+        "DEPLOYMENT_API_AVAILABLE_V1_0"
+    ],
+    "versionDefines": [
+        {
+            "name": "nuget.moq",
+            "expression": "1.0.0",
+            "define": "NUGET_MOQ_AVAILABLE"
+        },
+        {
+            "name": "com.unity.nuget.mono-cecil",
+            "expression": "1.10.2",
+            "define": "CECIL_AVAILABLE"
+        },
+        {
+            "name": "com.unity.services.deployment.api",
+            "expression": "[1.0.0-pre.5,1.3.0-exp.1)",
+            "define": "DEPLOYMENT_API_AVAILABLE_V1_0"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -1,0 +1,8 @@
+{
+  "entries": {
+    "mock_key": "123a"
+  },
+  "types": {
+    "mock_key": "INT"
+  }
+}

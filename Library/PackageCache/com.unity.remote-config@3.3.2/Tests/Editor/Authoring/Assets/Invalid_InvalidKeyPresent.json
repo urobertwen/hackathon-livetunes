@@ -1,0 +1,9 @@
+{
+  "entries": {
+    "mock_key": "mock_value"
+  },
+  "types": {
+    "mock_key": "STRING"
+  },
+  "invalid_key": "value"
+}
