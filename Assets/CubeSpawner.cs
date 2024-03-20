@@ -13,6 +13,8 @@ public class CubeSpawner : MonoBehaviour
     public float minBounceSpeed = 0f; // Minimum bounce speed of the cubes
     public float maxBounceSpeed = 5f; // Maximum bounce speed of the cubes
 
+    public string deviceTier;
+
     private float deltaTime = 0.0f;
     private float[] cubeTargets; // Array to store the target heights for each cube
     private float[] cubeSpeeds; // Array to store the bounce speeds for each cube
@@ -45,6 +47,8 @@ public class CubeSpawner : MonoBehaviour
     void ApplyRemoteSettings(ConfigResponse configResponse)
     {
         numberOfCubes = RemoteConfigService.Instance.appConfig.GetInt("numberOfCubes",numberOfCubes);
+        deviceTier = RemoteConfigService.Instance.appConfig.GetString("deviceTier");
+        
         Debug.Log("RemoteConfigService.Instance.appConfig fetched: " + RemoteConfigService.Instance.appConfig.config.ToString());
 
         //clear the cubes from the scene
@@ -60,14 +64,15 @@ public class CubeSpawner : MonoBehaviour
     {
         BounceCubes();
         CalculateFPS();
-        await Task.Delay(1000);
+        
 
         if (!hasRun)
         {
+            hasRun = true;
+            await Task.Delay(1000);
             var attributes = new appAttributes();
             attributes.currentFPS = fps;
             RemoteConfigService.Instance.FetchConfigs(new userAttributes(), attributes);
-            hasRun = true;
         }
 
     }
@@ -161,5 +166,8 @@ public class CubeSpawner : MonoBehaviour
 
         Rect rect6 = new Rect(10, 180, 250, 50);
         GUI.Label(rect6, "Max Bounce Speed: " + maxBounceSpeed.ToString(), style);
+
+        Rect rect7 = new Rect(10, 210, 250, 50);
+        GUI.Label(rect7, "Device Tier: " + deviceTier, style);
     }
 }
