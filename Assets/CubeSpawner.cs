@@ -13,12 +13,13 @@ public class CubeSpawner : MonoBehaviour
     public float minBounceSpeed = 0f; // Minimum bounce speed of the cubes
     public float maxBounceSpeed = 5f; // Maximum bounce speed of the cubes
 
-    public string deviceTier;
+    public string deviceTier = "none";
 
     private float deltaTime = 0.0f;
     private float[] cubeTargets; // Array to store the target heights for each cube
     private float[] cubeSpeeds; // Array to store the bounce speeds for each cube
     private int fps;
+    private int fpsSent;
     bool hasRun = false; 
 
     public struct userAttributes {}
@@ -47,7 +48,7 @@ public class CubeSpawner : MonoBehaviour
     void ApplyRemoteSettings(ConfigResponse configResponse)
     {
         numberOfCubes = RemoteConfigService.Instance.appConfig.GetInt("numberOfCubes",numberOfCubes);
-        deviceTier = RemoteConfigService.Instance.appConfig.GetString("deviceTier");
+        deviceTier = RemoteConfigService.Instance.appConfig.GetString("deviceTier", deviceTier);
         
         Debug.Log("RemoteConfigService.Instance.appConfig fetched: " + RemoteConfigService.Instance.appConfig.config.ToString());
 
@@ -72,6 +73,7 @@ public class CubeSpawner : MonoBehaviour
             await Task.Delay(1000);
             var attributes = new appAttributes();
             attributes.currentFPS = fps;
+            fpsSent = fps;
             RemoteConfigService.Instance.FetchConfigs(new userAttributes(), attributes);
         }
 
@@ -138,36 +140,28 @@ public class CubeSpawner : MonoBehaviour
         int fps = Mathf.RoundToInt(1.0f / deltaTime);
         GUIStyle style = new GUIStyle();
         Rect rect = new Rect(10, 10, 150, 50);
-        style.fontSize = 20;
+        style.fontSize = 38;
+        style.fontStyle = FontStyle.Bold;
         style.normal.textColor = Color.white;
 
         // Set background color
-        GUI.backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.5f); // Dark gray color with some transparency
+        GUI.backgroundColor = new Color(0.4f, 0.4f, 0.4f, 0.9f); // Dark gray color with some transparency
         // Draw a background box for labels
-        GUI.Box(new Rect(5, 5, 240, 240), "");
+        GUI.Box(new Rect(5, 5, 580, 200), "");
         // Reset background color
         GUI.backgroundColor = Color.clear;
 
-        // Display FPS
-        GUI.Label(rect, "FPS: " + fps, style);
+        // Display FPS values
+        
+        GUI.Label(rect, "Recorded FPS: " + fpsSent, style);
 
-        // Display numberOfCubes, minBounceHeight, maxBounceHeight, minBounceSpeed, and maxBounceSpeed
-        Rect rect2 = new Rect(10, 60, 250, 50);
-        GUI.Label(rect2, "Number of Cubes: " + numberOfCubes.ToString(), style);
+        Rect rect1 = new Rect(10, 60, 580, 50);
+        GUI.Label(rect1, "Number of Cubes: " + numberOfCubes.ToString(), style);
 
-        Rect rect3 = new Rect(10, 90, 250, 50);
-        GUI.Label(rect3, "Min Bounce Height: " + minBounceHeight.ToString(), style);
+        Rect rect2 = new Rect(10, 100, 580, 50);
+        GUI.Label(rect2, "Current FPS: " + fps, style);
 
-        Rect rect4 = new Rect(10, 120, 250, 50);
-        GUI.Label(rect4, "Max Bounce Height: " + maxBounceHeight.ToString(), style);
-
-        Rect rect5 = new Rect(10, 150, 250, 50);
-        GUI.Label(rect5, "Min Bounce Speed: " + minBounceSpeed.ToString(), style);
-
-        Rect rect6 = new Rect(10, 180, 250, 50);
-        GUI.Label(rect6, "Max Bounce Speed: " + maxBounceSpeed.ToString(), style);
-
-        Rect rect7 = new Rect(10, 210, 250, 50);
-        GUI.Label(rect7, "Device Tier: " + deviceTier, style);
+        Rect rect3 = new Rect(10, 140, 580, 50);
+        GUI.Label(rect3, "Fell into: " + deviceTier, style);
     }
 }
